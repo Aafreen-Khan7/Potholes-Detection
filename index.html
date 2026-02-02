@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pothole Detection System - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <i class="fas fa-road"></i>
+                <h1>Pothole Detection System</h1>
+            </div>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showTab('user')">User Login</button>
+                <button class="tab-btn" onclick="showTab('admin')">Admin Login</button>
+            </div>
+
+            <!-- User Login Form -->
+            <form id="userLoginForm" class="login-form active">
+                <h2>User Login</h2>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="userEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="userPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <p class="signup-link">Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+            </form>
+
+            <!-- Admin Login Form -->
+            <form id="adminLoginForm" class="login-form">
+                <h2>Admin Login</h2>
+                <div class="form-group">
+                    <i class="fas fa-user-shield"></i>
+                    <input type="text" id="adminUsername" placeholder="Admin Username" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="adminPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-btn">Login as Admin</button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="login-form">
+                <h2>Create Account</h2>
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signupName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="signupPhone" placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign Up</button>
+                <p class="signup-link">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

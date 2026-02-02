@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Pothole Detection System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-road"></i>
+            <span>Admin Panel</span>
+        </div>
+        <div class="nav-user">
+            <span id="adminName">Administrator</span>
+            <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="menu">
+                <li class="menu-item active" onclick="showAdminSection('overview')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Overview</span>
+                </li>
+                <li class="menu-item" onclick="showAdminSection('reports')">
+                    <i class="fas fa-file-alt"></i>
+                    <span>All Reports</span>
+                </li>
+                <li class="menu-item" onclick="showAdminSection('users')">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </li>
+                <li class="menu-item" onclick="showAdminSection('analytics')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </li>
+                <li class="menu-item" onclick="showAdminSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overviewSection" class="content-section active">
+                <h2>System Overview</h2>
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Reports</h4>
+                            <p class="big-number" id="adminTotalReports">0</p>
+                            <span class="stat-change positive">+12% this week</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Pending</h4>
+                            <p class="big-number" id="adminPendingReports">0</p>
+                            <span class="stat-change">Needs attention</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Resolved</h4>
+                            <p class="big-number" id="adminResolvedReports">0</p>
+                            <span class="stat-change positive">+8% this week</span>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Active Users</h4>
+                            <p class="big-number" id="adminActiveUsers">0</p>
+                            <span class="stat-change positive">+5 new users</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivityList" class="activity-list">
+                        <!-- Activity items will be loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reportsSection" class="content-section">
+                <h2>All Reports</h2>
+                <div class="filters">
+                    <select id="statusFilter" onchange="filterReports()">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                    <select id="severityFilter" onchange="filterReports()">
+                        <option value="all">All Severity</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <input type="text" id="searchReports" placeholder="Search reports..." onkeyup="searchReports()">
+                </div>
+                <div class="table-container">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Location</th>
+                                <th>Severity</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
+                            <!-- Reports will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="usersSection" class="content-section">
+                <h2>User Management</h2>
+                <div class="table-container">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Reports</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analyticsSection" class="content-section">
+                <h2>Analytics Dashboard</h2>
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Reports Over Time</h3>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Chart visualization placeholder</p>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Severity Distribution</h3>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-pie"></i>
+                            <p>Chart visualization placeholder</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settingsSection" class="content-section">
+                <h2>System Settings</h2>
+                <div class="settings-form">
+                    <div class="setting-group">
+                        <h3>Detection Settings</h3>
+                        <label>
+                            <input type="checkbox" checked> Enable automatic detection
+                        </label>
+                        <label>
+                            <input type="checkbox" checked> Email notifications
+                        </label>
+                        <label>
+                            Confidence threshold: <input type="number" value="75" min="0" max="100">%
+                        </label>
+                    </div>
+                    <div class="setting-group">
+                        <h3>Admin Preferences</h3>
+                        <label>
+                            <input type="checkbox" checked> Show resolved reports
+                        </label>
+                        <label>
+                            <input type="checkbox"> Auto-archive old reports (90 days)
+                        </label>
+                    </div>
+                    <button class="save-settings-btn"><i class="fas fa-save"></i> Save Settings</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
