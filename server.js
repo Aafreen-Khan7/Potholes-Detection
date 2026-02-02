@@ -89,10 +89,10 @@ app.post('/api/signup', (req, res) => {
 
 // Admin Registration
 app.post('/api/admin/signup', (req, res) => {
-    const { username, email, password } = req.body;
+    const { department, email, name, username, password } = req.body;
     
     // Validate inputs
-    if (!username || !email || !password) {
+    if (!department || !email || !name || !username || !password) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
     
@@ -118,6 +118,8 @@ app.post('/api/admin/signup', (req, res) => {
     // Create new admin
     const newAdmin = {
         id: data.admins.length + 1,
+        department,
+        name,
         username,
         email,
         password,
@@ -133,16 +135,18 @@ app.post('/api/admin/signup', (req, res) => {
 
 // User Login
 app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
+    const { emailOrUsername, password } = req.body;
     
     // Validate inputs exist
-    if (!email || !password) {
-        return res.status(400).json({ success: false, message: 'Email and password are required' });
+    if (!emailOrUsername || !password) {
+        return res.status(400).json({ success: false, message: 'Email/Username and password are required' });
     }
     
     const data = readData();
-    // Strict exact match - both email AND password must match exactly
-    const user = data.users.find(u => u.email === email && u.password === password);
+    // Check if login is by email or username
+    const user = data.users.find(u => 
+        (u.email === emailOrUsername || u.name === emailOrUsername) && u.password === password
+    );
     
     if (user) {
         res.json({ 
@@ -156,22 +160,24 @@ app.post('/api/login', (req, res) => {
             } 
         });
     } else {
-        res.status(401).json({ success: false, message: 'Invalid email or password' });
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 });
 
 // Admin Login
 app.post('/api/admin/login', (req, res) => {
-    const { username, password } = req.body;
+    const { emailOrUsername, password } = req.body;
     
     // Validate inputs exist
-    if (!username || !password) {
-        return res.status(400).json({ success: false, message: 'Username and password are required' });
+    if (!emailOrUsername || !password) {
+        return res.status(400).json({ success: false, message: 'Email/Username and password are required' });
     }
     
     const data = readData();
-    // Strict exact match - both username AND password must match exactly
-    const admin = data.admins.find(a => a.username === username && a.password === password);
+    // Check if login is by email or username
+    const admin = data.admins.find(a => 
+        (a.email === emailOrUsername || a.username === emailOrUsername) && a.password === password
+    );
     
     if (admin) {
         res.json({ 

@@ -118,17 +118,17 @@ function showLogin() {
 // User Login
 document.getElementById('userLoginForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const email = document.getElementById('userEmail').value;
+    const emailOrUsername = document.getElementById('userEmailOrUsername').value;
     const password = document.getElementById('userPassword').value;
 
-    if (email && password) {
+    if (emailOrUsername && password) {
         try {
             const response = await fetch('http://localhost:3000/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ emailOrUsername, password })
             });
             
             const result = await response.json();
@@ -157,17 +157,17 @@ document.getElementById('userLoginForm')?.addEventListener('submit', async funct
 // Admin Login
 document.getElementById('adminLoginForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const username = document.getElementById('adminUsername').value;
+    const emailOrUsername = document.getElementById('adminEmailOrUsername').value;
     const password = document.getElementById('adminPassword').value;
 
-    if (username && password) {
+    if (emailOrUsername && password) {
         try {
             const response = await fetch('http://localhost:3000/api/admin/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ emailOrUsername, password })
             });
             
             const result = await response.json();
@@ -230,12 +230,14 @@ document.getElementById('signupForm')?.addEventListener('submit', async function
 // Admin Signup
 document.getElementById('adminSignupForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const username = document.getElementById('adminSignupUsername').value;
+    const department = document.getElementById('adminSignupDepartment').value;
     const email = document.getElementById('adminSignupEmail').value;
+    const name = document.getElementById('adminSignupName').value;
+    const username = document.getElementById('adminSignupUsername').value;
     const password = document.getElementById('adminSignupPassword').value;
     const confirmPassword = document.getElementById('adminSignupConfirmPassword').value;
 
-    if (username && email && password && confirmPassword) {
+    if (department && email && name && username && password && confirmPassword) {
         // Check if passwords match
         if (password !== confirmPassword) {
             showModal('Error', 'Passwords do not match', 'error');
@@ -254,7 +256,7 @@ document.getElementById('adminSignupForm')?.addEventListener('submit', async fun
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ department, email, name, username, password })
             });
             
             const result = await response.json();

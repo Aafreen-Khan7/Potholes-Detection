@@ -27,8 +27,8 @@
                 <p class="form-subtitle">Access your account to report potholes</p>
                 
                 <div class="form-group">
-                    <label for="userEmail">Email Address</label>
-                    <input type="email" id="userEmail" placeholder="your.email@example.com" required>
+                    <label for="userEmailOrUsername">Email or Username</label>
+                    <input type="text" id="userEmailOrUsername" placeholder="your.email@example.com or username" required>
                 </div>
                 <div class="form-group">
                     <label for="userPassword">Password</label>
@@ -44,8 +44,8 @@
                 <p class="form-subtitle">Government agency access</p>
                 
                 <div class="form-group">
-                    <label for="adminUsername">Admin Username</label>
-                    <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                    <label for="adminEmailOrUsername">Email or Username</label>
+                    <input type="text" id="adminEmailOrUsername" placeholder="admin@agency.gov.in or username" required>
                 </div>
                 <div class="form-group">
                     <label for="adminPassword">Password</label>
@@ -62,12 +62,23 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="adminSignupUsername">Agency / Department Name</label>
-                        <input type="text" id="adminSignupUsername" placeholder="Department Name" required>
+                        <label for="adminSignupDepartment">Agency / Department Name</label>
+                        <input type="text" id="adminSignupDepartment" placeholder="Department Name" required>
                     </div>
                     <div class="form-group">
                         <label for="adminSignupEmail">Official Email</label>
                         <input type="email" id="adminSignupEmail" placeholder="official@department.gov.in" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adminSignupName">Official Name</label>
+                        <input type="text" id="adminSignupName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminSignupUsername">Username</label>
+                        <input type="text" id="adminSignupUsername" placeholder="Choose username" required>
                     </div>
                 </div>
                 
