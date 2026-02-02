@@ -77,12 +77,14 @@ function showTab(tab) {
     const userForm = document.getElementById('userLoginForm');
     const adminForm = document.getElementById('adminLoginForm');
     const signupForm = document.getElementById('signupForm');
+    const adminSignupForm = document.getElementById('adminSignupForm');
     const tabs = document.querySelectorAll('.tab-btn');
 
     // Reset all forms
     userForm.classList.remove('active');
     adminForm.classList.remove('active');
     signupForm.classList.remove('active');
+    adminSignupForm?.classList.remove('active');
     tabs.forEach(t => t.classList.remove('active'));
 
     // Show selected tab
@@ -99,6 +101,13 @@ function showSignup() {
     const forms = document.querySelectorAll('.login-form');
     forms.forEach(f => f.classList.remove('active'));
     document.getElementById('signupForm').classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+}
+
+function showAdminSignup() {
+    const forms = document.querySelectorAll('.login-form');
+    forms.forEach(f => f.classList.remove('active'));
+    document.getElementById('adminSignupForm').classList.add('active');
     document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
 }
 
@@ -209,6 +218,53 @@ document.getElementById('signupForm')?.addEventListener('submit', async function
                 });
             } else {
                 showModal('Error', result.message || 'Unable to create account', 'error');
+            }
+        } catch (error) {
+            showModal('Error', 'Unable to connect to server. Please make sure the server is running.', 'error');
+        }
+    } else {
+        showModal('Error', 'Please fill in all fields', 'error');
+    }
+});
+
+// Admin Signup
+document.getElementById('adminSignupForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const username = document.getElementById('adminSignupUsername').value;
+    const email = document.getElementById('adminSignupEmail').value;
+    const password = document.getElementById('adminSignupPassword').value;
+    const confirmPassword = document.getElementById('adminSignupConfirmPassword').value;
+
+    if (username && email && password && confirmPassword) {
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            showModal('Error', 'Passwords do not match', 'error');
+            return;
+        }
+        
+        // Validate government email
+        if (!email.endsWith('@gov.in')) {
+            showModal('Error', 'Admin email must be a valid government email ending with @gov.in', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch('http://localhost:3000/api/admin/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showModal('Success', 'Admin account created successfully! Please login.', 'success', function() {
+                    showTab('admin');
+                });
+            } else {
+                showModal('Error', result.message || 'Unable to create admin account', 'error');
             }
         } catch (error) {
             showModal('Error', 'Unable to connect to server. Please make sure the server is running.', 'error');

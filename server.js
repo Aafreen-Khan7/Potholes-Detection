@@ -87,6 +87,50 @@ app.post('/api/signup', (req, res) => {
     res.json({ success: true, message: 'Account created successfully', user: { id: newUser.id, name, email } });
 });
 
+// Admin Registration
+app.post('/api/admin/signup', (req, res) => {
+    const { username, email, password } = req.body;
+    
+    // Validate inputs
+    if (!username || !email || !password) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    
+    // Validate government email domain
+    if (!email.endsWith('@gov.in')) {
+        return res.status(400).json({ success: false, message: 'Admin email must be a valid government email ending with @gov.in' });
+    }
+    
+    const data = readData();
+    
+    // Check if admin username already exists
+    const existingAdmin = data.admins.find(a => a.username === username);
+    if (existingAdmin) {
+        return res.status(400).json({ success: false, message: 'Username already taken' });
+    }
+    
+    // Check if email already exists
+    const existingEmail = data.admins.find(a => a.email === email);
+    if (existingEmail) {
+        return res.status(400).json({ success: false, message: 'Email already registered' });
+    }
+    
+    // Create new admin
+    const newAdmin = {
+        id: data.admins.length + 1,
+        username,
+        email,
+        password,
+        type: 'admin',
+        createdAt: new Date().toISOString()
+    };
+    
+    data.admins.push(newAdmin);
+    writeData(data);
+    
+    res.json({ success: true, message: 'Admin account created successfully', admin: { id: newAdmin.id, username, email } });
+});
+
 // User Login
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
