@@ -1005,6 +1005,15 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+.preview-container video {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: #000;
+}
+
 .analyze-btn {
     display: inline-flex;
     align-items: center;
@@ -1626,6 +1635,7 @@ body {
     
     .menu-item span {
         font-size: 14
+    }
     
     .menu-item i {
         font-size: 18px;
@@ -1667,6 +1677,10 @@ body {
     }
     
     .preview-container img {
+        max-height: 300px;
+    }
+    
+    .preview-container video {
         max-height: 300px;
     }
     

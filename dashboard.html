@@ -48,18 +48,19 @@
                 <h2>Detect Potholes</h2>
                 <div class="detection-area">
                     <div class="upload-box">
-                        <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)">
+                        <input type="file" id="imageUpload" accept="image/*,video/*" onchange="handleMediaUpload(event)">
                         <label for="imageUpload">
                             <i class="fas fa-cloud-upload-alt"></i>
                             <p>Click to upload or drag and drop</p>
-                            <span>JPG, PNG, or GIF (Max 10MB)</span>
+                            <span>Images (JPG, PNG, GIF) or Videos (MP4, AVI, MOV) - Max 50MB</span>
                         </label>
                     </div>
 
                     <div id="previewContainer" class="preview-container hidden">
-                        <img id="previewImage" alt="Preview">
-                        <button onclick="analyzeImage()" class="analyze-btn">
-                            <i class="fas fa-search"></i> Analyze Image
+                        <img id="previewImage" alt="Preview" class="hidden">
+                        <video id="previewVideo" controls class="hidden"></video>
+                        <button onclick="analyzeMedia()" class="analyze-btn">
+                            <i class="fas fa-search"></i> Analyze Media
                         </button>
                     </div>
 

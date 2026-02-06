@@ -154,6 +154,35 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+    
+    // Setup drag and drop for file upload
+    const uploadBox = document.querySelector('.upload-box');
+    if (uploadBox) {
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.style.borderColor = '#667eea';
+            uploadBox.style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+        });
+        
+        uploadBox.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadBox.style.borderColor = '';
+            uploadBox.style.backgroundColor = '';
+        });
+        
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.style.borderColor = '';
+            uploadBox.style.backgroundColor = '';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const input = document.getElementById('imageUpload');
+                input.files = files;
+                handleMediaUpload({ target: input });
+            }
+        });
+    }
 });
 
 // Show section
@@ -192,24 +221,74 @@ function showSection(section) {
     }
 }
 
-// Handle image upload
-function handleImageUpload(event) {
+// Handle image or video upload
+function handleMediaUpload(event) {
     const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('previewImage').src = e.target.result;
-            document.getElementById('previewContainer').classList.remove('hidden');
-            document.getElementById('resultsContainer').classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
+    if (!file) return;
+    
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    if (file.size > maxSize) {
+        showToast('File size exceeds 50MB. Please upload a smaller file.', 'error');
+        return;
     }
+    
+    const previewImage = document.getElementById('previewImage');
+    const previewVideo = document.getElementById('previewVideo');
+    const previewContainer = document.getElementById('previewContainer');
+    const resultsContainer = document.getElementById('resultsContainer');
+    
+    // Check if file is image or video
+    const isImage = file.type.startsWith('image/');
+    const isVideo = file.type.startsWith('video/');
+    
+    if (!isImage && !isVideo) {
+        showToast('Please upload an image or video file.', 'error');
+        return;
+    }
+    
+    currentImage = file;
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        if (isImage) {
+            previewImage.src = e.target.result;
+            previewImage.classList.remove('hidden');
+            previewVideo.classList.add('hidden');
+            previewVideo.src = '';
+        } else if (isVideo) {
+            previewVideo.src = e.target.result;
+            previewVideo.classList.remove('hidden');
+            previewImage.classList.add('hidden');
+            previewImage.src = '';
+        }
+        
+        previewContainer.classList.remove('hidden');
+        resultsContainer.classList.add('hidden');
+        
+        showToast(`${isImage ? 'Image' : 'Video'} loaded successfully!`, 'success');
+    };
+    
+    reader.onerror = function() {
+        showToast('Error loading file. Please try again.', 'error');
+    };
+    
+    reader.readAsDataURL(file);
 }
 
-// Analyze image (mock implementation)
-function analyzeImage() {
+// Backward compatibility for old function name
+function handleImageUpload(event) {
+    handleMediaUpload(event);
+}
+
+// Analyze image or video (mock implementation)
+function analyzeMedia() {
+    if (!currentImage) {
+        showToast('Please upload a file first.', 'warning');
+        return;
+    }
     // Show loading
-    showToast('Analyzing image...', 'info');
+    const fileType = currentImage.type.startsWith('video/') ? 'video' : 'image';
+    showToast(`Analyzing ${fileType}...`, 'info');
 
     // Mock analysis delay
     setTimeout(() => {
@@ -226,8 +305,16 @@ function analyzeImage() {
         document.getElementById('confidence').textContent = `${results.confidence}%`;
 
         document.getElementById('resultsContainer').classList.remove('hidden');
-        showToast('Analysis complete!', 'success');
+        
+        detectionResults = results;
+        const fileType = currentImage.type.startsWith('video/') ? 'video' : 'image';
+        showToast(`${fileType.charAt(0).toUpperCase() + fileType.slice(1)} analysis complete!`, 'success');
     }, 2000);
+}
+
+// Backward compatibility for old function name
+function analyzeImage() {
+    analyzeMedia();
 }
 
 // Submit report
